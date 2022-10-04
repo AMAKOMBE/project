@@ -1,0 +1,14 @@
+#login-body{
+    background: linear-gradient(rgba(0,0,50,0.5),rgba(0,0,50,0.5)),url(pencil.jpg);
+    background-size: cover;
+    background-position: center;  
+
+}
+
+.login-box{
+    max-width: 50%;
+    float: none;
+    margin: 120px auto;
+    background: white;
+    padding: 30px;
+}
