@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if (!isset($_SESSION['username']) && !isset($_SESSION['province']) && !isset($_SESSION['district'])) {
+if (!isset($_SESSION['username'])) {
     header('location:login_index.php');
 }
 ?>
@@ -46,7 +46,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['province']) && !isset($_S
 </head>
 
 <body>
-    <header>
+<header>
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
                 <h1 style="font-size:1.5rem;color:white;">Web Portal</h1>
@@ -62,21 +62,21 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['province']) && !isset($_S
                     <div class="offcanvas-body">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="web_index.php">
+                                <a class="nav-link" aria-current="page" href="web_index.php">
                                     <i class="bi bi-house"></i>
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="display_student.php">
+                                <a class="nav-link active" href="display_driver.php">
                                     <i class="bi bi-people-fill"></i>
-                                    Student Information
+                                    Driver Information
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="web_report.php">
                                     <i class="bi bi-bar-chart-fill"></i>
-                                    School Stats
+                                    Company Stats
                                 </a>
                             </li>
                             <li class="nav-item mt-5">
@@ -100,65 +100,63 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['province']) && !isset($_S
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="display_student.php">
+                            <a class="nav-link active" href="display_driver.php">
                                 <i class="bi bi-people-fill"></i>
-                                Student Information
+                                Driver Information
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="web_report.php">
                                 <i class="bi bi-bar-chart-fill"></i>
-                                School Stats
+                                Company Stats
                             </a>
                         </li>
                     </ul>
                 </div>
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-                <h4 class="text-center alert alert-info">STUDENT INFORMATION</h4>
-                <span><a href="create_student.php" class="btn btn-primary">Add Student</a></span><br>
+                <h4 class="text-center alert alert-info">DRIVER INFORMATION</h4>
+                <span><a href="create_driver.php" class="btn btn-primary">Add Driver</a></span><br>
                 <br>
                 <table class="table my-3" width="100%" id="student_table">
                     <thead>
                         <tr>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Class</th>
+                            <th scope="col">Name</th>
                             <th scope="col">Contact</th>
-                            <th scope="col">Email</th>
+                            <th scope="col">ID</th>
+                            <th scope="col">Number</th>
+                            <th scope="col">Plate Number</th>
+                            <th scope="col">Zone</th>
                             <th scope="col">Operation</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $con = mysqli_connect('localhost', 'root', '', 'education');
-                        $school = $_SESSION['username'];
-                        $sql = "select * from student where c_school_name like '$school' order by s_lname asc";
+                        $con = mysqli_connect('localhost', 'root', '', 'project');
+                        $name = $_SESSION['username'];
+                        $sql = "select * from driverinfo where company_name like '$name' order by plate_number asc";
                         $result = mysqli_query($con, $sql);
 
                         if ($result) {
                             while ($row = mysqli_fetch_assoc($result)) {
-                                $id = $row['s_id'];
-                                $fname = $row['s_fname'];
-                                $lname = $row['s_lname'];
-                                $gender = $row['gender'];
-                                $class_year = $row['class_year'];
-                                $p_number = $row['p_number'];
-                                $p_email = $row['p_email'];
+                                $fname = $row['d_name'];
+                                $number = $row['phone_number'];
+                                $id = $row['d_id'];
+                                $reg_number = $row['reg_id'];
+                                $address = $row['d_address'];
+                                $plate = $row['plate_number'];
+                                $zone = $row['d_zone'];
                                 echo '
                                     <tr>
                                     <td>' . $fname . '</td>
-                                    <td>' . $lname . '</td>
-                                    <td>' . $gender . '</td>
-                                    <td>' . $class_year . '</td>
-                                    <td>' . $p_number . '</td>
-                                    <td>' . $p_email . '</td>
+                                    <td>' . $number . '</td>
+                                    <td>' . $id . '</td>
+                                    <td>' . $reg_number . '</td>
+                                    <td>' . $plate . '</td>
+                                    <td>' . $zone . '</td>
                                     <td>
-                                    <button class="btn btn-primary"><a href="update_student.php?updte=' . $id . '"
-                                    class="text-light">Update</a></button>
-                                    <button class="btn btn-danger"><a href="remove_student.php?
-                                    rmve=' . $id . '" class="text-light">Remove</a></button>
+                                    <button class="btn btn-primary"><a href="record_stat.php?record=' . $id . '"
+                                    class="text-light">Record</a></button>
                                     </td>
                                     </tr>
                                     ';
@@ -188,7 +186,7 @@ if (!isset($_SESSION['username']) && !isset($_SESSION['province']) && !isset($_S
                 responsive: true,
                 language: {
                     search: "_INPUT_",
-                    searchPlaceholder: "Search Student",
+                    searchPlaceholder: "Search Driver",
                 }
             });
         });

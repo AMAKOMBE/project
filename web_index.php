@@ -43,7 +43,7 @@ if (!isset($_SESSION['username'])) {
 </head>
 
 <body>
-    <header>
+<header>
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
                 <h1 style="font-size:1.5rem;color:white;">Web Portal</h1>
@@ -65,15 +65,15 @@ if (!isset($_SESSION['username'])) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="display_student.php">
+                                <a class="nav-link" href="display_driver.php">
                                     <i class="bi bi-people-fill"></i>
-                                    Student Information
+                                    Driver Information
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="web_report.php">
                                     <i class="bi bi-bar-chart-fill"></i>
-                                    School Stats
+                                    Company Stats
                                 </a>
                             </li>
                             <li class="nav-item mt-5">
@@ -97,15 +97,15 @@ if (!isset($_SESSION['username'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="display_student.php">
+                            <a class="nav-link" href="display_driver.php">
                                 <i class="bi bi-people-fill"></i>
-                                Student Information
+                                Driver Information
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="web_report.php">
                                 <i class="bi bi-bar-chart-fill"></i>
-                                School Stats
+                                Company Stats
                             </a>
                         </li>
                     </ul>
@@ -117,12 +117,12 @@ if (!isset($_SESSION['username'])) {
                 </div>
                 <div>
                     <?php
-                    $con = mysqli_connect('localhost', 'root', '', 'education');
-                    $school = $_SESSION['username'];
-                    $sql = "SELECT distinct COUNT(s_id) as num from student where c_school_name like '$school'";
+                    $con = mysqli_connect('localhost', 'root', '', 'project');
+                    $project = $_SESSION['username'];
+                    $sql = "SELECT distinct COUNT(d_id) as num from driverinformation where d_id like '$project'";
                     $result = mysqli_query($con, $sql);
                     $row = mysqli_fetch_assoc($result);
-                    $total_student = $row['num'];
+                    $total_driver = $row['num'];
                     ?>
                     <p style="font-size:120%;">As of the Academic year of <b>2021/2022</b> shows the total number of student attending <?php echo $_SESSION['username']; ?>
                         are <b><?php echo $total_student; ?></b> students. With the help of student information, below shows the current
@@ -175,7 +175,7 @@ if (!isset($_SESSION['username'])) {
             var data = google.visualization.arrayToDataTable([
                 ['Guardian/Parent Education Level', 'students'],
                 <?php
-                $con = mysqli_connect('localhost', 'root', '', 'education');
+                $con = mysqli_connect('localhost', 'root', '', 'project');
                 $school = $_SESSION['username'];
                 $sql = "SELECT distinct COUNT(p_id) as num,p_education_level from student where c_school_name like '$school' GROUP BY p_education_level";
                 $result = mysqli_query($con, $sql);
@@ -189,7 +189,7 @@ if (!isset($_SESSION['username'])) {
                 title: 'Guardian/Parent Education Level status'
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('Educationchart_s'));
+            var chart = new google.visualization.PieChart(document.getElementById('projectchart_s'));
 
             chart.draw(data, options);
         }

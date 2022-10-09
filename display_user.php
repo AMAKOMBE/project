@@ -117,7 +117,7 @@ $con = mysqli_connect('localhost','root','','project');
                 </div>
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
-                <h4 class="text-center alert alert-info">DRIVERS INFORMATION</h4>
+                <h4 class="text-center alert alert-info">USER INFORMATION</h4>
                 <span><a href="create_user.php" class="btn btn-primary">Create User</a></span><br>
                 <br>
                 <table class="table my-3" width="100%" id="user_table">

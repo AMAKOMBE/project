@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if (!isset($_SESSION['user_name'])) {
+if (!isset($_SESSION['username'])) {
     header('location:login_index.php');
 }
 ?>
@@ -45,7 +45,7 @@ if (!isset($_SESSION['user_name'])) {
 </head>
 
 <body>
-    <header>
+<header>
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
                 <h1 style="font-size:1.5rem;color:white;">Web Portal</h1>
@@ -61,19 +61,19 @@ if (!isset($_SESSION['user_name'])) {
                     <div class="offcanvas-body">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="web_index.php">
+                                <a class="nav-link" aria-current="page" href="web_index.php">
                                     <i class="bi bi-house"></i>
                                     Dashboard
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="display_Driver.php">
+                                <a class="nav-link" href="display_driver.php">
                                     <i class="bi bi-people-fill"></i>
                                     Driver Information
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="web_report.php">
+                                <a class="nav-link active" href="web_report.php">
                                     <i class="bi bi-bar-chart-fill"></i>
                                     Company Stats
                                 </a>
@@ -99,7 +99,7 @@ if (!isset($_SESSION['user_name'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="display_Driver.php">
+                            <a class="nav-link" href="display_driver.php">
                                 <i class="bi bi-people-fill"></i>
                                 Driver Information
                             </a>
@@ -134,7 +134,7 @@ if (!isset($_SESSION['user_name'])) {
             var data = google.visualization.arrayToDataTable([
                 ['Class Year', 'Unemployeed', 'Public Sector', 'Private Sector'],
                 <?php
-                $con = mysqli_connect('localhost', 'root', '', 'education');
+                $con = mysqli_connect('localhost', 'root', '', 'project');
                 $Company = $_SESSION['username'];
                 $sql = "SELECT distinct count(p_id) as num,class_year from Driver where p_occupation like 'none' and c_Company_name like '$Company' GROUP by class_year";
                 $sql1 = "SELECT distinct count(p_id) as num,class_year from Driver where p_occupation like 'public sector' and c_Company_name like '$Company' GROUP by class_year";

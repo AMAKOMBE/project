@@ -48,14 +48,14 @@ if (!isset($_SESSION['username'])) {
     <header>
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
-                <h1 style="font-size:1.5rem;color:white;">Admin portal</h1>
+                <h1 style="font-size:1.5rem;color:white;">ADMIN PORTAL</h1>
                 <button class="navbar-toggler navtoggle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasDarkNavbar" aria-controls="offcanvasDarkNavbar">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <a class="nav-link px-3 logoutbtn" href="logout.php" style="color:white;">Log out</a>
                 <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasDarkNavbar" aria-labelledby="offcanvasDarkNavbarLabel">
                     <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Admin portal</h5>
+                        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">ADMIN PORTAL</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                     </div>
                     <div class="offcanvas-body">
@@ -115,12 +115,12 @@ if (!isset($_SESSION['username'])) {
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">CURRENT COUNTRY STATISTICS</h1>
+                    <h1 class="h2">CURRENT USER STATISTICS</h1>
                 </div>
                 <div>
                     <?php
                     $con = mysqli_connect('localhost', 'root', '', 'project');
-                    $sql = "SELECT COUNT(r_id) as num from reportinformation";
+                    $sql = "SELECT COUNT(r_id) as num from reportinfo";
                     $result = mysqli_query($con, $sql);
                     $row = mysqli_fetch_assoc($result);
                     $total_driver = $row['num'];
@@ -151,7 +151,7 @@ if (!isset($_SESSION['username'])) {
                 ['Perfomance of Driver', 'Driver'],
                 <?php
                 $con = mysqli_connect('localhost', 'root', '', 'project');
-                $sql = "SELECT distinct COUNT(r_id) as num,travel_distance from reportinformation GROUP BY travel_distance";
+                $sql = "SELECT distinct COUNT(r_id) as num,travel_distance from reportinfo GROUP BY travel_distance";
                 $result = mysqli_query($con, $sql);
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "['" . $row['travel_distance'] . "'," . $row['num'] . "],";
@@ -176,7 +176,7 @@ if (!isset($_SESSION['username'])) {
                 ['Perfomance of Driver', 'Driver'],
                 <?php
                 $con = mysqli_connect('localhost', 'root', '', 'project');
-                $sql = "SELECT distinct COUNT(r_id) as num,tap_go from reportinformation GROUP BY tap_go";
+                $sql = "SELECT distinct COUNT(r_id) as num,tap_go from reportinfo GROUP BY tap_go";
                 $result = mysqli_query($con, $sql);
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "['" . $row['tap_go'] . "'," . $row['num'] . "],";
@@ -201,7 +201,7 @@ if (!isset($_SESSION['username'])) {
                 ['Perfomance of Driver', 'Driver'],
                 <?php
                 $con = mysqli_connect('localhost', 'root', '', 'project');
-                $sql = "SELECT distinct COUNT(r_id) as num,accidents from reportinformation GROUP BY accidents";
+                $sql = "SELECT distinct COUNT(r_id) as num,accidents from reportinfo GROUP BY accidents";
                 $result = mysqli_query($con, $sql);
                 while ($row = mysqli_fetch_assoc($result)) {
                     echo "['" . $row['accidents'] . "'," . $row['num'] . "],";
