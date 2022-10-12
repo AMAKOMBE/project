@@ -118,20 +118,21 @@ if (!isset($_SESSION['username'])) {
                     <h1 class="h2">STATISTICAL DETAILED REPORT</h1>
                 </div>
                 <span><a href="admin_report.php" class="btn btn-outline-secondary active">JAN</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">FEB</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">MARCH</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">APRIL</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">MAY</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">JUNE</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">JULY</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">AUGUST</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">SEPTEMBER</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">OCTOBER</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">NOVEMBER</a></span>
-                <span><a href="admin_report.php" class="btn btn-outline-secondary">DECEMBER</a></span><br>
+                <span><a href="admin_report_2.php" class="btn btn-outline-secondary">FEB</a></span>
+                <span><a href="admin_report_3.php" class="btn btn-outline-secondary">MARCH</a></span>
+                <span><a href="admin_report_4.php" class="btn btn-outline-secondary">APRIL</a></span>
+                <span><a href="admin_report_5.php" class="btn btn-outline-secondary">MAY</a></span>
+                <span><a href="admin_report_6.php" class="btn btn-outline-secondary">JUNE</a></span>
+                <span><a href="admin_report_7.php" class="btn btn-outline-secondary">JULY</a></span>
+                <span><a href="admin_report_8.php" class="btn btn-outline-secondary">AUGUST</a></span>
+                <span><a href="admin_report_9.php" class="btn btn-outline-secondary">SEPTEMBER</a></span>
+                <span><a href="admin_report_10.php" class="btn btn-outline-secondary">OCTOBER</a></span>
+                <span><a href="admin_report_11.php" class="btn btn-outline-secondary">NOVEMBER</a></span>
+                <span><a href="admin_report_12.php" class="btn btn-outline-secondary">DECEMBER</a></span><br>
                 <br>
-                <div id="OccupationChart_p" style="width: 800px; height: 500px;"></div><br>
-                <div id="EducationChart_p" style="width: 800px; height: 500px;"></div>
+                <div id="reportchart" style="width: 100%; height: 1000px;"></div>
+                <div id="tapgochart" style="width: 800px; height: 500px;"></div>
+                <div id="accidentchart" style="width: 800px; height: 500px;"></div>
             </main>
         </div>
     </div>
@@ -143,28 +144,21 @@ if (!isset($_SESSION['username'])) {
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Province', 'Unemployeed', 'Public Sector', 'Private Sector'],
+                ['Driver Name', 'Travel Distance', 'Tap-Go', 'Accidents'],
                 <?php
-                $con = mysqli_connect('localhost', 'root', '', 'education');
-                $sql = "SELECT c_province,count(p_id) as num from student where p_occupation like 'none' GROUP by c_province";
-                $sql1 = "SELECT c_province,count(p_id) as num from student where p_occupation like 'public sector' GROUP by c_province";
-                $sql2 = "SELECT c_province,count(p_id) as num from student where p_occupation like 'private sector' GROUP by c_province";
+                $con = mysqli_connect('localhost', 'root', '', 'project');
+                $sql = "SELECT count(r_id),d_name,travel_distance,tap_go,accidents,month FROM reportinfo,driverinfo
+                where r_id = reg_id and month like 'january' group by d_name,travel_distance,tap_go,accidents,month";
                 $result = mysqli_query($con, $sql);
-                $result1 = mysqli_query($con, $sql1);
-                $result2 = mysqli_query($con, $sql2);
                 $rowname = [];
                 $row = [];
                 $row1 = [];
                 $row2 = [];
                 while ($ro = mysqli_fetch_assoc($result)) {
-                    $rowname[] = $ro['c_province'];
-                    $row[] = $ro['num'];
-                }
-                while ($ro1 = mysqli_fetch_assoc($result1)) {
-                    $row1[] = $ro1['num'];
-                }
-                while ($ro2 = mysqli_fetch_assoc($result2)) {
-                    $row2[] = $ro2['num'];
+                    $rowname[] = $ro['d_name'];
+                    $row[] = $ro['travel_distance'];
+                    $row1[] = $ro['tap_go'];
+                    $row2[] = $ro['accidents'];
                 }
                 $c = count($row);
                 $a = 0;
@@ -177,68 +171,17 @@ if (!isset($_SESSION['username'])) {
 
             var options = {
                 chart: {
-                    title: 'Guardian/Parent Occupation Status',
-                    subtitle: 'This dispalys the occupation status of Parents/Guardians who has student in primary school on Province level:',
-                }
+                    title: 'Drivers Monthly Report Status',
+                    subtitle: 'This displays the Drivers Monthly Report Status according to travelled distanced, tap-go count and accidents involved:',
+                },
+                bars: 'horizontal'
             };
 
-            var chart = new google.charts.Bar(document.getElementById('OccupationChart_p'));
+            var chart = new google.charts.Bar(document.getElementById('reportchart'));
 
             chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
 
-        google.charts.setOnLoadCallback(drawChart1);
-
-        function drawChart1() {
-            var data = google.visualization.arrayToDataTable([
-                ['Province', 'No Education or High School level only', 'Bachelor Degree', 'Masters Degree', 'Doctorate Degree'],
-                <?php
-                $con = mysqli_connect('localhost', 'root', '', 'education');
-                $sql = "SELECT c_province,count(p_id) as num from student where p_education_level in ('none','high school certificate') GROUP by c_province";
-                $sql1 = "SELECT c_province,count(p_id) as num from student where p_education_level like 'bachelor degree' GROUP by c_province";
-                $sql2 = "SELECT c_province,count(p_id) as num from student where p_education_level like 'masters degree' GROUP by c_province";
-                $sql3 = "SELECT c_province,count(p_id) as num from student where p_education_level like 'doctorate degree' GROUP by c_province";
-                $result = mysqli_query($con, $sql);
-                $result1 = mysqli_query($con, $sql1);
-                $result2 = mysqli_query($con, $sql2);
-                $result3 = mysqli_query($con, $sql3);
-                $rowname = [];
-                $row = [];
-                $row1 = [];
-                $row2 = [];
-                $row3 = [];
-                while ($ro = mysqli_fetch_assoc($result)) {
-                    $rowname[] = $ro['c_province'];
-                    $row[] = $ro['num'];
-                }
-                while ($ro1 = mysqli_fetch_assoc($result1)) {
-                    $row1[] = $ro1['num'];
-                }
-                while ($ro2 = mysqli_fetch_assoc($result2)) {
-                    $row2[] = $ro2['num'];
-                }
-                while ($ro3 = mysqli_fetch_assoc($result3)) {
-                    $row3[] = $ro3['num'];
-                }
-                $c = count($rowname);
-                $a = 0;
-                while ($a < $c) {
-                    echo "['" . $rowname[$a] . "'," . $row[$a] . "," . $row1[$a] . "," . $row2[$a] . "," . $row3[$a] . "], ";
-                    $a = $a + 1;
-                }
-                ?>
-            ]);
-
-            var options = {
-                chart: {
-                    title: 'Guardian/Parent Education Level',
-                    subtitle: 'This dispalys the education level of Parents/Guardians who has student in primary school on Province level:',
-                }
-            };
-
-            var chart = new google.charts.Bar(document.getElementById('EducationChart_p'));
-
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            
         }
     </script>
 </body>

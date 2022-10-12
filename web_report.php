@@ -115,7 +115,7 @@ if (!isset($_SESSION['username'])) {
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2"><?php echo $_SESSION['user_name']; ?> Detailed Status</h1>
+                    <h1 class="h2"><?php echo $_SESSION['username']; ?> Detailed Status</h1>
                 </div>
 
                 <div id="driverChart_p" style="width: 800px; height: 500px;"></div><br>

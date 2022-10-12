@@ -8,30 +8,21 @@ if (!isset($_SESSION['username'])) {
 $con = mysqli_connect('localhost', 'root', '', 'project');
 
 if (isset($_POST['submit'])) {
-
     $id = $_GET['record'];
-    $check = "select * from driverinfo where d_id like '$id'";
+    $travel_distance = $_POST['travel_distance'];
+    $tap_go = $_POST['tap_go'];
+    $accidents = $_POST['accidents'];
+    $month = $_POST['month'];
 
-    $res = mysqli_query($con, $check);
-    $row = mysqli_fetch_assoc($res);
-    $r_id = $row['reg_id'];
-    if ($res) {
+    $sql = "INSERT INTO reportinfo (r_id,travel_distance,tap_go,accidents,month) 
+    VALUES ('$id','$travel_distance','$tap_go','$accidents','$month')";
 
-        $travel_distance = $_POST['travel_distance'];
-        $tap_go = $_POST['tap_go'];
-        $accidents = $_POST['accidents'];
-        $month = $_POST['month'];
+    $result = mysqli_query($con, $sql);
 
-        $sql = "INSERT INTO reportinfo (r_id,travel_distance,tap_go,accidents,month) 
-        VALUES ('$r_id','$travel_distance','$tap_go','$accidents','$month'";
-
-        $result = mysqli_query($con, $sql);
-
-        if ($result) {
-            header('location:display_driver.php');
-        } else {
-            die(mysqli_error($con));
-        }
+    if ($result) {
+        header('location:display_driver.php');
+    } else {
+        die(mysqli_error($con));
     }
 }
 ?>
@@ -72,22 +63,22 @@ if (isset($_POST['submit'])) {
                                         <input type="text" name="accidents" class="form-control" placeholder="Enter Total Accidents" autocomplete="off" required><br>
                                     </div>
                                     <div class="form-group">
-                                        <label><b>Month:</b></label><br>
-                                        <select name="month" required>
-                                            <option value="january">January</option>
-                                            <option value="february">February</option>
-                                            <option value="march">March</option>
-                                            <option value="april">April</option>
-                                            <option value="may">May</option>
-                                            <option value="june">June</option>
-                                            <option value="july">July</option>
-                                            <option value="august">August</option>
-                                            <option value="september">September</option>
-                                            <option value="october">October</option>
-                                            <option value="november">November</option>
-                                            <option value="december">December</option>
-                                        </select>
-                                    </div><br>
+                                    <label><b>Month:</b></label><br>
+                                    <select name="month" required>
+                                        <option value="january">January</option>
+                                        <option value="february">February</option>
+                                        <option value="march">March</option>
+                                        <option value="april">April</option>
+                                        <option value="may">May</option>
+                                        <option value="june">June</option>
+                                        <option value="july">July</option>
+                                        <option value="august">August</option>
+                                        <option value="september">September</option>
+                                        <option value="october">October</option>
+                                        <option value="november">November</option>
+                                        <option value="december">December</option>
+                                    </select>
+                                </div><br>
                                     <button type="submit" class="btn btn-outline-success" name="submit">Submit</button>
                                     <a href="display_driver.php" class="btn btn-outline-danger" role="button" aria-pressed="true">Cancel</a>
                                 </div>

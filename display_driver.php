@@ -155,7 +155,7 @@ if (!isset($_SESSION['username'])) {
                                     <td>' . $plate . '</td>
                                     <td>' . $zone . '</td>
                                     <td>
-                                    <button class="btn btn-primary"><a href="record_stat.php?record=' . $id . '"
+                                    <button class="btn btn-primary"><a href="record_stat.php?record=' . $reg_number. '"
                                     class="text-light">Record</a></button>
                                     </td>
                                     </tr>
