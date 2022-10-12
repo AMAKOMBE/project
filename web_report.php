@@ -45,7 +45,7 @@ if (!isset($_SESSION['username'])) {
 </head>
 
 <body>
-<header>
+    <header>
         <nav class="navbar navbar-dark bg-dark fixed-top">
             <div class="container-fluid">
                 <h1 style="font-size:1.5rem;color:white;">Web Portal</h1>
@@ -117,9 +117,20 @@ if (!isset($_SESSION['username'])) {
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2"><?php echo $_SESSION['username']; ?> Detailed Status</h1>
                 </div>
-
-                <div id="driverChart_p" style="width: 800px; height: 500px;"></div><br>
-                <div id="companyChart_p" style="width: 800px; height: 500px;"></div>
+                <span><a href="web_report.php" class="btn btn-outline-secondary active">JAN</a></span>
+                <span><a href="web_report_2.php" class="btn btn-outline-secondary">FEB</a></span>
+                <span><a href="web_report_3.php" class="btn btn-outline-secondary">MARCH</a></span>
+                <span><a href="web_report_4.php" class="btn btn-outline-secondary">APRIL</a></span>
+                <span><a href="web_report_5.php" class="btn btn-outline-secondary">MAY</a></span>
+                <span><a href="web_report_6.php" class="btn btn-outline-secondary">JUNE</a></span>
+                <span><a href="web_report_7.php" class="btn btn-outline-secondary">JULY</a></span>
+                <span><a href="web_report_8.php" class="btn btn-outline-secondary">AUGUST</a></span>
+                <span><a href="web_report_9.php" class="btn btn-outline-secondary">SEPTEMBER</a></span>
+                <span><a href="web_report_10.php" class="btn btn-outline-secondary">OCTOBER</a></span>
+                <span><a href="web_report_11.php" class="btn btn-outline-secondary">NOVEMBER</a></span>
+                <span><a href="web_report_12.php" class="btn btn-outline-secondary">DECEMBER</a></span><br>
+                <br>
+                <div id="reportchart" style="width: 100%; height: 1000px;"></div>
             </main>
         </div>
     </div>
@@ -132,29 +143,22 @@ if (!isset($_SESSION['username'])) {
 
         function drawChart() {
             var data = google.visualization.arrayToDataTable([
-                ['Class Year', 'Unemployeed', 'Public Sector', 'Private Sector'],
+                ['Driver Name', 'Travel Distance', 'Tap-Go', 'Accidents'],
                 <?php
                 $con = mysqli_connect('localhost', 'root', '', 'project');
-                $Company = $_SESSION['username'];
-                $sql = "SELECT distinct count(p_id) as num,class_year from Driver where p_occupation like 'none' and c_Company_name like '$Company' GROUP by class_year";
-                $sql1 = "SELECT distinct count(p_id) as num,class_year from Driver where p_occupation like 'public sector' and c_Company_name like '$Company' GROUP by class_year";
-                $sql2 = "SELECT distinct count(p_id) as num,class_year from Driver where p_occupation like 'private sector' and c_Company_name like '$Company' GROUP by class_year";
+                $project = $_SESSION['username'];
+                $sql = "SELECT count(r_id),d_name,travel_distance,tap_go,accidents,month FROM reportinfo,driverinfo
+                where r_id = reg_id and company_name = '$project' and month like 'january' group by d_name,travel_distance,tap_go,accidents,month";
                 $result = mysqli_query($con, $sql);
-                $result1 = mysqli_query($con, $sql1);
-                $result2 = mysqli_query($con, $sql2);
                 $rowname = [];
                 $row = [];
                 $row1 = [];
                 $row2 = [];
                 while ($ro = mysqli_fetch_assoc($result)) {
-                    $rowname[] = $ro['class_year'];
-                    $row[] = $ro['num'];
-                }
-                while ($ro1 = mysqli_fetch_assoc($result1)) {
-                    $row1[] = $ro1['num'];
-                }
-                while ($ro2 = mysqli_fetch_assoc($result2)) {
-                    $row2[] = $ro2['num'];
+                    $rowname[] = $ro['d_name'];
+                    $row[] = $ro['travel_distance'];
+                    $row1[] = $ro['tap_go'];
+                    $row2[] = $ro['accidents'];
                 }
                 $c = count($row);
                 $a = 0;
@@ -167,69 +171,17 @@ if (!isset($_SESSION['username'])) {
 
             var options = {
                 chart: {
-                    title: 'Driver performance Status',
-                    subtitle: 'This displays the Driver status according to their Drivers performance:',
-                }
+                    title: 'Drivers Monthly Report Status',
+                    subtitle: 'This displays the Drivers Monthly Report Status according to travelled distanced, tap-go count and accidents involved:',
+                },
+                bars: 'horizontal'
             };
 
-            var chart = new google.charts.Bar(document.getElementById('OccupationChart_p'));
+            var chart = new google.charts.Bar(document.getElementById('reportchart'));
 
             chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
 
-        google.charts.setOnLoadCallback(drawChart1);
 
-        function drawChart1() {
-            var data = google.visualization.arrayToDataTable([
-                ['Class Year', 'No Education or High Company level only', 'Bachelor Degree', 'Masters Degree', 'Doctorate Degree'],
-                <?php
-                $con = mysqli_connect('localhost', 'root', '', 'education');
-                $Company = $_SESSION['user_name'];
-                $sql = "SELECT distinct count(p_id) as num,class_year from Driver where p_education_level in ('none','high Company certificate') and c_Company_name like '$Company' GROUP by class_year";
-                $sql1 = "SELECT distinct count(p_id) as num,class_year from Driver where p_education_level like 'bachelor degree' and c_Company_name like '$Company' GROUP by class_year";
-                $sql2 = "SELECT distinct count(p_id) as num,class_year from Driver where p_education_level like 'masters degree' and c_Company_name like '$Company' GROUP by class_year";
-                $sql3 = "SELECT distinct count(p_id)as num,class_year from Driver where p_education_level like 'doctorate degree' and c_Company_name like '$Company' GROUP by class_year";
-                $result = mysqli_query($con, $sql);
-                $result1 = mysqli_query($con, $sql1);
-                $result2 = mysqli_query($con, $sql2);
-                $result3 = mysqli_query($con, $sql3);
-                $rowname = [];
-                $row = [];
-                $row1 = [];
-                $row2 = [];
-                $row3 = [];
-                while ($ro = mysqli_fetch_assoc($result)) {
-                    $rowname[] = $ro['class_year'];
-                    $row[] = $ro['num'];
-                }
-                while ($ro1 = mysqli_fetch_assoc($result1)) {
-                    $row1[] = $ro1['num'];
-                }
-                while ($ro2 = mysqli_fetch_assoc($result2)) {
-                    $row2[] = $ro2['num'];
-                }
-                while ($ro3 = mysqli_fetch_assoc($result3)) {
-                    $row3[] = $ro3['num'];
-                }
-                $c = count($row);
-                $a = 0;
-                while ($a < $c) {
-                    echo "['" . $rowname[$a] . "'," . $row[$a] . "," . $row1[$a] . "," . $row2[$a] . "," . $row3[$a] . "], ";
-                    $a = $a + 1;
-                }
-                ?>
-            ]);
-
-            var options = {
-                chart: {
-                    title: 'Company statistics',
-                    subtitle: 'This displays the education level of Parents/Guardians according to their Drivers classes:',
-                }
-            };
-
-            var chart = new google.charts.Bar(document.getElementById('EducationChart_p'));
-
-            chart.draw(data, google.charts.Bar.convertOptions(options));
         }
     </script>
 </body>

@@ -61,7 +61,7 @@ if (!isset($_SESSION['username'])) {
                     <div class="offcanvas-body">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="web_index.php">
+                                <a class="nav-link" aria-current="page" href="web_index.php">
                                     <i class="bi bi-house"></i>
                                     Dashboard
                                 </a>
@@ -73,7 +73,7 @@ if (!isset($_SESSION['username'])) {
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="web_report.php">
+                                <a class="nav-link active" href="web_report.php">
                                     <i class="bi bi-bar-chart-fill"></i>
                                     Company Stats
                                 </a>
@@ -93,7 +93,7 @@ if (!isset($_SESSION['username'])) {
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="web_index.php">
+                            <a class="nav-link" aria-current="page" href="web_index.php">
                                 <i class="bi bi-house"></i>
                                 Dashboard
                             </a>
@@ -105,7 +105,7 @@ if (!isset($_SESSION['username'])) {
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="web_report.php">
+                            <a class="nav-link active" href="web_report.php">
                                 <i class="bi bi-bar-chart-fill"></i>
                                 Company Stats
                             </a>
@@ -115,115 +115,73 @@ if (!isset($_SESSION['username'])) {
             </nav>
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 mt-5">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2"><?php echo $_SESSION['username']; ?> Current Status</h1>
+                    <h1 class="h2"><?php echo $_SESSION['username']; ?> Detailed Status</h1>
                 </div>
-                <div>
-                    <?php
-                    $con = mysqli_connect('localhost', 'root', '', 'project');
-                    $project = $_SESSION['username'];
-                    $sql = "SELECT distinct COUNT(d_id) as num from driverinfo where company_name = '$project'";
-                    $result = mysqli_query($con, $sql);
-                    $row = mysqli_fetch_assoc($result);
-                    $total_driver = $row['num'];
-                    ?>
-                    <p style="font-size:120%;">As of the working calendar year of <b>2021/2022</b> shows the total number of driver attending <?php echo $_SESSION['username']; ?>
-                        are <b><?php echo $total_driver; ?></b> Drivers. With the help of driver information, below shows the current
-                        statistics of drivers on their <i>distance covered status</i> and <i>Tap-go status</i>:
-                    </p>
-                </div>
-                <div class="d-flex justify-content-around">
-                    <div id="distancechart" style="width: 1800px; height: 475px;"></div>
-                    <div id="tapgochart" style="width: 1800px; height: 475px;"></div>
-                    <div id="accidentchart" style="width: 1800px; height: 475px;"></div>
-                </div>
-
+                <span><a href="web_report.php" class="btn btn-outline-secondary">JAN</a></span>
+                <span><a href="web_report_2.php" class="btn btn-outline-secondary">FEB</a></span>
+                <span><a href="web_report_3.php" class="btn btn-outline-secondary">MARCH</a></span>
+                <span><a href="web_report_4.php" class="btn btn-outline-secondary">APRIL</a></span>
+                <span><a href="web_report_5.php" class="btn btn-outline-secondary">MAY</a></span>
+                <span><a href="web_report_6.php" class="btn btn-outline-secondary active">JUNE</a></span>
+                <span><a href="web_report_7.php" class="btn btn-outline-secondary">JULY</a></span>
+                <span><a href="web_report_8.php" class="btn btn-outline-secondary">AUGUST</a></span>
+                <span><a href="web_report_9.php" class="btn btn-outline-secondary">SEPTEMBER</a></span>
+                <span><a href="web_report_10.php" class="btn btn-outline-secondary">OCTOBER</a></span>
+                <span><a href="web_report_11.php" class="btn btn-outline-secondary">NOVEMBER</a></span>
+                <span><a href="web_report_12.php" class="btn btn-outline-secondary">DECEMBER</a></span><br>
+                <br>
+                <div id="reportchart" style="width: 100%; height: 1000px;"></div>
             </main>
         </div>
     </div>
     </div>
     <script type="text/javascript">
         google.charts.load('current', {
-            'packages': ['corechart']
+            'packages': ['bar']
         });
         google.charts.setOnLoadCallback(drawChart);
 
         function drawChart() {
-
             var data = google.visualization.arrayToDataTable([
-                ['Perfomance of Driver', 'Driver'],
+                ['Driver Name', 'Travel Distance', 'Tap-Go', 'Accidents'],
                 <?php
                 $con = mysqli_connect('localhost', 'root', '', 'project');
                 $project = $_SESSION['username'];
-                $sql = "SELECT distinct COUNT(r_id) as num,travel_distance from reportinfo,driverinfo
-                where company_name = '$project' and r_id = reg_id GROUP BY travel_distance";
+                $sql = "SELECT count(r_id),d_name,travel_distance,tap_go,accidents,month FROM reportinfo,driverinfo
+                where r_id = reg_id and company_name = '$project' and month like 'june' group by d_name,travel_distance,tap_go,accidents,month";
                 $result = mysqli_query($con, $sql);
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "['" . $row['travel_distance'] . "'," . $row['num'] . "],";
+                $rowname = [];
+                $row = [];
+                $row1 = [];
+                $row2 = [];
+                while ($ro = mysqli_fetch_assoc($result)) {
+                    $rowname[] = $ro['d_name'];
+                    $row[] = $ro['travel_distance'];
+                    $row1[] = $ro['tap_go'];
+                    $row2[] = $ro['accidents'];
+                }
+                $c = count($row);
+                $a = 0;
+                while ($a < $c) {
+                    echo "['" . $rowname[$a] . "'," . $row[$a] . "," . $row1[$a] . "," . $row2[$a] . "], ";
+                    $a = $a + 1;
                 }
                 ?>
             ]);
 
             var options = {
-                title: 'Travels distance per driver status'
+                chart: {
+                    title: 'Drivers Monthly Report Status',
+                    subtitle: 'This displays the Drivers Monthly Report Status according to travelled distanced, tap-go count and accidents involved:',
+                },
+                bars: 'horizontal'
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('distancechart'));
+            var chart = new google.charts.Bar(document.getElementById('reportchart'));
 
-            chart.draw(data, options);
-        }
+            chart.draw(data, google.charts.Bar.convertOptions(options));
 
-        google.charts.setOnLoadCallback(drawChart1);
 
-        function drawChart1() {
-
-            var data = google.visualization.arrayToDataTable([
-                ['Perfomance of Driver', 'Driver'],
-                <?php
-                $con = mysqli_connect('localhost', 'root', '', 'project');
-                $project = $_SESSION['username'];
-                $sql = "SELECT distinct COUNT(r_id) as num,tap_go from reportinfo,driverinfo
-                where company_name = '$project' and r_id = reg_id GROUP BY tap_go";
-                $result = mysqli_query($con, $sql);
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "['" . $row['tap_go'] . "'," . $row['num'] . "],";
-                }
-                ?>
-            ]);
-
-            var options = {
-                title: 'Tap_Go per driver status'
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('tapgochart'));
-
-            chart.draw(data, options);
-        }
-
-        google.charts.setOnLoadCallback(drawChart2);
-
-        function drawChart2() {
-
-            var data = google.visualization.arrayToDataTable([
-                ['Perfomance of Driver', 'Driver'],
-                <?php
-                $con = mysqli_connect('localhost', 'root', '', 'project');
-                $project = $_SESSION['username'];
-                $sql = "SELECT distinct COUNT(r_id) as num,accidents from reportinfo,driverinfo
-                where company_name = '$project' and r_id = reg_id GROUP BY accidents";
-                $result = mysqli_query($con, $sql);
-                while ($row = mysqli_fetch_assoc($result)) {
-                    echo "['" . $row['accidents'] . "'," . $row['num'] . "],";
-                }
-                ?>
-            ]);
-
-            var options = {
-                title: 'Accidents per driver status'
-            };
-
-            var chart = new google.visualization.PieChart(document.getElementById('accidentchart'));
-
-            chart.draw(data, options);
         }
     </script>
 </body>
